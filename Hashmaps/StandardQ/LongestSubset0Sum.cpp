@@ -12,6 +12,18 @@ The five elements that form the longest subarray that sum up to zero are: -387, 
 */
 #include<bits/stdc++.h>
 using namespace std;
+//time O(n) and space O(1)
 int lengthOfLongestSubsetWithZeroSum(int* arr, int n) {
-    // Write your code here
+    unordered_map<int,int> prefsum;
+    int sum=0,size=0;
+    for(int i=0;i<n;i++){
+        sum+=arr[i];
+        if(!sum)
+            size=i+1;
+        if(!prefsum.count(sum))
+            prefsum[sum]=i;
+        else
+            size=i-prefsum[sum];
+    }
+    return size;
 }
