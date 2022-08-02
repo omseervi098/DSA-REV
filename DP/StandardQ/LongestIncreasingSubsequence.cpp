@@ -15,7 +15,68 @@ Sample Input 2 :
 1 2 2
 
 Sample Output 2 :
-2
+3   
 */
 #include<bits/stdc++.h>
 using namespace std;
+//Recursive Solution --O(2^n)
+#include<bits/stdc++.h>
+using namespace std;
+int helper(int * arr,int n,int curr){
+    if(curr==0) return 1;
+    int cnt=1;
+    for(int i=curr-1;i>=0;i--){
+        if(arr[i]<arr[curr])
+        {
+            int ans=1+helper(arr,n,i);
+            //cout<<arr[i]<<" "<<ans+1<<endl;
+            cnt=max(cnt,ans);
+        }
+    }
+    return cnt;
+}
+int longestIncreasingSubsequence(int* arr, int n) {
+    int mx=0;
+    for(int i=0;i<n;i++)
+        mx=max(mx,helper(arr,n,i));
+    return mx;
+} 
+//Memoization Solution  --O(n^2)
+int helper(int * arr,int n,int curr,vector<int> &dp){
+    if(curr==0) return 1;
+    int cnt=1;
+    if(dp[curr]!=-1)
+    return dp[curr];
+    for(int i=curr-1;i>=0;i--){
+        if(arr[i]<arr[curr])
+        {
+            int ans=1+helper(arr,n,i);
+            cnt=max(cnt,ans);
+        }
+    }
+    dp[curr]=cnt;
+    return cnt;
+}
+int longestIncreasingSubsequence(int* arr, int n) {
+    int mx=0;
+    vector<int> dp(n,-1);
+    for(int i=0;i<n;i++)
+        mx=max(mx,helper(arr,n,i,dp));
+    return mx;
+}
+//DP Solution --O(n^2)
+int longestIncreasingSubsequence(int* arr, int n) {
+    vector<int> dp(n,1);
+    int ans=1;
+    for(int i=1;i<n;i++){
+        int mx=1;
+        for(int j=i-1;j>=0;j--){
+            if(arr[j]<arr[i]){
+                mx=max(mx,1+dp[j]);
+            }
+        }
+        dp[i]=mx;
+        ans=max(ans,mx);
+    }return ans;
+}
+
