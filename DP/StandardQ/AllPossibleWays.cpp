@@ -7,16 +7,37 @@ For example: if a = 10 and b = 2, only way to represent 10 as sum of unique inte
 Hence, answer is 1.
 Note : x^y represents x raise to the power y
 */
-int getAllWays(int a,int b){
-    if(a<=1) return 1;
-    int x=1,ans=0;
-    while(pow(x,b)<=a){
-        int subans=getAllWays(a-pow(x,b),b);
-        ans++;
-        x++;
-    }
+//Recursive 
+int helper(int n,int b,int currno){
+    if(n<0) return 0;
+    if(n==0) return 1;
+    int ans=0;
+    for(int i=currno;pow(i,b)<=n;i++)
+         ans+=helper(n-pow(i,b),b,i+1);
     return ans;
 }
-//b=2
-//1 2 3 4 5 6 7 8 9 10
-//
+//Memoization --
+#include<bits/stdc++.h>
+int helper(int x,int n,int curNo,int *dp){
+    if(x<0){
+        return 0;
+    }
+    if(x==0){
+        return 1;
+    }
+
+    int ans=0;
+
+    for(int i=curNo;pow(i,n)<=x;i++){
+            ans+=helper(x-pow(i,n),n,i+1,dp);
+    }
+    dp[x]=ans;
+    return ans;    
+}
+int getAllWays(int n, int b) {
+    int dp[100000];
+    for(int i=0;i<100000;i++){
+        dp[i]=-1;
+    }
+    return helper(n,b,1,dp);
+}
